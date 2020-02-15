@@ -13,7 +13,7 @@ void setup()
 void loop()
 {
   prepareBlink();
-  straight(200);
+  circle(8, 5, 100);
   black();
   delay(3000);
 }
@@ -80,14 +80,14 @@ void circle(int counts1, int counts2, int totalOutsideCounts)
     count2 = getCount2();
     totalCount1 += count1 - prvCount1;
     totalCount2 += count2 - prvCount2;
-
+    
     while (count1 < counts1 || count2 < counts2)
     {
       count1 = getCount1();
       count2 = getCount2();
       totalCount1 += count1 - prvCount1;
       totalCount2 += count2 - prvCount2;
-
+      HSVCycle(min(totalCount1, totalCount2), totalOutsideCounts);
       if(count1 != prvCount1 || count2 != prvCount2)
       {
         if (debugFlag)
@@ -114,7 +114,7 @@ void circle(int counts1, int counts2, int totalOutsideCounts)
     count2 = getCount2();
     totalCount1 += count1 - prvCount1;
     totalCount2 += count2 - prvCount2;
-
+    HSVCycle(min(totalCount1, totalCount2), totalOutsideCounts);
     if (count1 != prvCount1 || count2 != prvCount2)
     {
       if (debugFlag)
