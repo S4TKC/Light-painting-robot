@@ -89,7 +89,7 @@ void HSVCycle(int progress, int len) //All LEDs will get a hue based on progress
   long progress_mapped = progress * 255L / len;
   for (int i = 0; i < LEDCount; i++)
   {
-    leds[i] = CHSV(progress_mapped, 255, allBrightFactor);
+    leds[i] = CHSV(progress_mapped, 255, 255/ allBrightFactor);
   }
   FastLED.show();
 }

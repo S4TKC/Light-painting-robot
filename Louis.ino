@@ -14,6 +14,11 @@ void loop()
 {
   prepareBlink();
   circle(8, 5, 100);
+  delay(500);
+  circle(5, 8, 200);
+  delay(500);
+  circle(8, 5, 100);
+  straight(200);
   black();
   delay(3000);
 }
@@ -65,39 +70,37 @@ void circle(int counts1, int counts2, int totalOutsideCounts)
   int fullCycles = (int) totalOutsideCounts / max(counts1, counts2);
   int totalCount1 = 0;
   int totalCount2 = 0;
-  if(debugFlag)
+  if (debugFlag)
   {
     Serial.println("Full Cycles: " + String(fullCycles));
   }
-  for(int i = 0; i < fullCycles; i++)
+  for (int i = 0; i < fullCycles; i++)
   {
-    if(debugFlag)
+    if (debugFlag)
     {
       Serial.println("Cycle number: " + String(i));
     }
     resetCount();
     count1 = getCount1();
     count2 = getCount2();
-    totalCount1 += count1 - prvCount1;
-    totalCount2 += count2 - prvCount2;
-    
+
     while (count1 < counts1 || count2 < counts2)
     {
       count1 = getCount1();
       count2 = getCount2();
-      totalCount1 += count1 - prvCount1;
-      totalCount2 += count2 - prvCount2;
-      HSVCycle(min(totalCount1, totalCount2), totalOutsideCounts);
-      if(count1 != prvCount1 || count2 != prvCount2)
+      if (count1 != prvCount1 || count2 != prvCount2)
       {
+        totalCount1 = count1 == prvCount1 ? totalCount1 : totalCount1 + 1;
+        totalCount2 = count2 == prvCount2 ? totalCount2 : totalCount2 + 1;
         if (debugFlag)
         {
-          Serial.print(count1);
+          Serial.print(totalCount1);
           Serial.print(" ");
-          Serial.println(count2);
+          Serial.println(totalCount2);
         }
         prvCount1 = count1;
         prvCount2 = count2;
+        HSVCycle(min(totalCount1, totalCount2), totalOutsideCounts);
       }
       int spd1 = count1 < counts1 ? maxEncodableSpeed : 0;
       int spd2 = count2 < counts2 ? maxEncodableSpeed : 0;
@@ -112,19 +115,19 @@ void circle(int counts1, int counts2, int totalOutsideCounts)
   {
     count1 = getCount1();
     count2 = getCount2();
-    totalCount1 += count1 - prvCount1;
-    totalCount2 += count2 - prvCount2;
-    HSVCycle(min(totalCount1, totalCount2), totalOutsideCounts);
     if (count1 != prvCount1 || count2 != prvCount2)
     {
+      totalCount1 = count1 == prvCount1 ? totalCount1 : totalCount1 + 1;
+      totalCount2 = count2 == prvCount2 ? totalCount2 : totalCount2 + 1;
       if (debugFlag)
       {
-        Serial.print(count1);
+        Serial.print(totalCount1);
         Serial.print(" ");
-        Serial.println(count2);
+        Serial.println(totalCount2);
       }
       prvCount1 = count1;
       prvCount2 = count2;
+      HSVCycle(min(totalCount1, totalCount2), totalOutsideCounts);
     }
     int spd1 = count1 < counts1 ? maxEncodableSpeed : 0;
     int spd2 = count2 < counts2 ? maxEncodableSpeed : 0;
