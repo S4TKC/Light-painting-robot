@@ -61,78 +61,17 @@ void straight(int len)
   motor2(0);
 }
 
-void circle(int counts1, int counts2, int totalOutsideCounts)
+void circle(int targetCounts1, int targetCounts2)
 {
+  unsigned int progress = 0;
   int count1 = 0;
-  int prvCount1 = -1;
   int count2 = 0;
+  int prvCount1 = -1;
   int prvCount2 = -1;
-  int fullCycles = (int) totalOutsideCounts / max(counts1, counts2);
-  int totalCount1 = 0;
-  int totalCount2 = 0;
-  if (debugFlag)
-  {
-    Serial.println("Full Cycles: " + String(fullCycles));
-  }
-  for (int i = 0; i < fullCycles; i++)
-  {
-    if (debugFlag)
-    {
-      Serial.println("Cycle number: " + String(i));
-    }
-    resetCount();
-    count1 = getCount1();
-    count2 = getCount2();
 
-    while (count1 < counts1 || count2 < counts2)
-    {
-      count1 = getCount1();
-      count2 = getCount2();
-      if (count1 != prvCount1 || count2 != prvCount2)
-      {
-        totalCount1 = count1 == prvCount1 ? totalCount1 : totalCount1 + 1;
-        totalCount2 = count2 == prvCount2 ? totalCount2 : totalCount2 + 1;
-        if (debugFlag)
-        {
-          Serial.print(totalCount1);
-          Serial.print(" ");
-          Serial.println(totalCount2);
-        }
-        prvCount1 = count1;
-        prvCount2 = count2;
-        HSVCycle(min(totalCount1, totalCount2), totalOutsideCounts);
-      }
-      int spd1 = count1 < counts1 ? maxEncodableSpeed : 0;
-      int spd2 = count2 < counts2 ? maxEncodableSpeed : 0;
-      motor1(spd1);
-      motor2(spd2);
-    }
-  }
-  int countsleft1 = max(counts1, counts2) == counts1 ? totalOutsideCounts - fullCycles * counts1 : (int) (totalOutsideCounts - fullCycles * counts2) * (counts1 / counts2);
-  int countsleft2 = max(counts1, counts2) == counts2 ? totalOutsideCounts - fullCycles * counts2 : (int) (totalOutsideCounts - fullCycles * counts1) * (counts2 / counts1);
-  resetCount();
-  while (count1 < countsleft1 || count2 < countsleft2)
+  while(count1 < targetCounts1 || count2 < targetCount2)
   {
-    count1 = getCount1();
-    count2 = getCount2();
-    if (count1 != prvCount1 || count2 != prvCount2)
-    {
-      totalCount1 = count1 == prvCount1 ? totalCount1 : totalCount1 + 1;
-      totalCount2 = count2 == prvCount2 ? totalCount2 : totalCount2 + 1;
-      if (debugFlag)
-      {
-        Serial.print(totalCount1);
-        Serial.print(" ");
-        Serial.println(totalCount2);
-      }
-      prvCount1 = count1;
-      prvCount2 = count2;
-      HSVCycle(min(totalCount1, totalCount2), totalOutsideCounts);
-    }
-    int spd1 = count1 < counts1 ? maxEncodableSpeed : 0;
-    int spd2 = count2 < counts2 ? maxEncodableSpeed : 0;
-    motor1(spd1);
-    motor2(spd2);
+    
   }
 }
 
