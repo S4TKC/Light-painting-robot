@@ -75,8 +75,7 @@ void black()
 void prepareBlink()
 {
   resetLEDs();
-  leds[3].g = 125;
-  leds[3].r = 125;
+  leds[3] = CRGB::Crimson;
   FastLED.show();
   delay(250);
   black();
