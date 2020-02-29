@@ -12,14 +12,7 @@ void setup()
 
 void loop()
 {
-  prepareBlink();
-  circle(8, 5, 15);
-  delay(500);
-  circle(5, 8, 15);
-  delay(500);
-  circle(8, 5, 15);
-  straight(200);
-  black();
+  straight(100);
   delay(3000);
 }
 
@@ -65,13 +58,13 @@ void circle(int countsRatio1, int countsRatio2, int multiplier)
 {
   int countsTotal1 = countsRatio1 * multiplier;
   int countsTotal2 = countsRatio2 * multiplier;
-  int outsideCounts = max(counts1Total, counts2Total);
+  int outsideCounts = max(countsTotal1, countsTotal2);
   int count1 = 0;
   int count2 = 0;
   int prvCount1 = -1;
   int prvCount2 = -1;
 
-  while (count1 < targetCounts1 || count2 < targetCount2)
+  while (count1 < countsTotal1 || count2 < countsTotal2)
   {
     count1 = getCount1();
     count2 = getCount2();
@@ -89,11 +82,11 @@ void circle(int countsRatio1, int countsRatio2, int multiplier)
     int completion1 = count1 * outsideCounts / countsTotal1;
     int completion2 = count2 * outsideCounts / countsTotal2;
     int progress = (completion1 + completion2) / 2 + 1;
-    int spd1 = completion1 <= progress ? 255 : 0;
-    int spd2 = completion2 <= progress ? 255 : 0;
+    int spd1 = completion1 <= progress ? maxEncodableSpeed : 0;
+    int spd2 = completion2 <= progress ? maxEncodableSpeed : 0;
     motor1(spd1);
     motor2(spd2);
-    HSVCycle(min(completion1, completion2), outsideCounts);
+    HSVSidewaysCycle(min(completion1, completion2), outsideCounts);
   }
 
 }
