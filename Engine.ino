@@ -40,13 +40,13 @@ void pinSetup()
   pinMode(m22, OUTPUT); //m2 pin 2
   pinMode(FLDataPin, OUTPUT); //FastLED data
   FastLED.addLeds<NEOPIXEL, FLDataPin>(leds, LEDCount);
+  FastLED.setBrightness(255 / 3);
   pinMode(encoder1, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(encoder1), ISR_encoder1, RISING);
   pinMode(encoder2, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(encoder2), ISR_encoder2, RISING);
 }
 //--------------------------------------------------------------
-const int allBrightFactor = 3; //The amount to dim all LEDs for, since the PSU cannot handle driving at full brightness
 
 void blue()
 {
@@ -88,7 +88,7 @@ void HSVCycle(int progress, int len) //All LEDs will get a hue based on progress
   long progress_mapped = progress * 255L / len;
   for (int i = 0; i < LEDCount; i++)
   {
-    leds[i] = CHSV(progress_mapped, 255, 255/ allBrightFactor);
+    leds[i] = CHSV(progress_mapped, 255, 255);
   }
   FastLED.show();
 }
@@ -101,7 +101,7 @@ void HSVSidewaysCycle(int progress, int len) //LEDs will get a hue based on prog
   {
     int newHValue = progress_mapped + i * (255 / LEDCount);
     newHValue = newHValue > 255 ? newHValue - 255 : newHValue;
-    leds[i] = CHSV(newHValue, 255, 255 / allBrightFactor);
+    leds[i] = CHSV(newHValue, 255, 255);
   }
   FastLED.show();
 }
@@ -112,8 +112,8 @@ void RedGreenCycle(int progress, int len)
   int progress_mapped = (int) progress * 255L / len;
   for (int i = 0; i < LEDCount; i += 1) //Only 4 of 7 LEDs will be lit, the outside ones, and the two next to the middle.
   {
-    leds[i].g = progress_mapped / allBrightFactor;
-    leds[i].r = (255 - progress_mapped) / allBrightFactor;
+    leds[i].g = progress_mapped;
+    leds[i].r = (255 - progress_mapped);
     leds[i].b = 0;
   }
   FastLED.show();
